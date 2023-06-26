@@ -1,0 +1,34 @@
+name: Build and Deploy
+
+on:
+  workflow_call:
+    secrets:
+        secret_token:
+            description: 'The github token passed from the caller'
+            required: true
+    
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        repository: awesomel-es/slave-repository
+        token: ${{ secrets.secret_token }}
+
+    - name: Hello world
+      run: echo "Hola mundo"
+ 
+    - name: Showing files
+      run: |
+        ls -la
+        more test.txt
+  
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: slave-repository
+        path: test.txt
