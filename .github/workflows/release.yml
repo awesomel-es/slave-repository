@@ -16,7 +16,7 @@ jobs:
         run: |
           RELEASE_URL=$(curl -s -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
-            "https://api.github.com/awesomel-es/slave-repository/releases/latest" | jq -r '.url')
+            "https://api.github.com/repos/awesomel-es/slave-repository/releases/latest" | jq -r '.url')
           echo "Release URL: $RELEASE_URL"
           ASSET_NAME="Pictures.40a5emu33g7b1.jpg.webp"
           ASSET_URL=$(curl -s -H "Accept: application/vnd.github.v3+json" \
