@@ -49,7 +49,7 @@ jobs:
                 await octokit.request('POST /repos/awesomel-es/slave-repository/releases/${{steps.create-release.outputs.release_id}}/assets{?test.txt, label}', {
                     owner: 'awesomel-es',
                     repo: 'slave-repository',
-                    release_id: ${{ steps.create-release.outcome.release_id }},
+                    release_id: ${{ steps.create-release.outputs.release_id }},
                     data: '@test.txt',
                     headers: {
                         'X-GitHub-Api-Version': '2022-11-28'
