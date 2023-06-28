@@ -11,8 +11,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Find Release Asset
+        id: find-asset
         run: |
-          gh release create v1.2.3 --notes "bugfix release"
+          RELEASE_URL=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
+            "https://api.github.com/awesomel-es/slave-repository/releases/latest" | jq -r '.url')
+      
+          ASSET_NAME="Pictures.40a5emu33g7b1.jpg.webp"
+          ASSET_URL=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
+            "$RELEASE_URL/assets" | jq -r ".[] | select(.name == \"$ASSET_NAME\") | .browser_download_url")
+      
+          echo "Asset URL: $ASSET_URL"
+      
