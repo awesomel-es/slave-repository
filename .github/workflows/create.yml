@@ -24,7 +24,7 @@ jobs:
                 auth: ${{ secrets.API_GH_TK }}
             })
 
-            await octokit.request('POST /repos/{owner}/{repo}/releases', {
+            await octokit.request('POST /repos/awesomel-es/slave-repository/releases', {
                 owner: 'awesomel-es',
                 repo: 'slave-repository',
                 tag_name: 'v2.0.0',
