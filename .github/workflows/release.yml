@@ -21,16 +21,16 @@ jobs:
           release_body="This is the release description. You can include additional details here."
 
           response=$(curl -sSL \
-            -H "Authorization: token $access_token" \
+            -H "Authorization: Bearer $access_token" \
             -H "Content-Type: application/json" \
             -X POST \
-            -d '{
-              "tag_name": "'"$tag_name"'",
-              "name": "'"$release_name"'",
-              "body": "'"$release_body"'",
-              "draft": false,
-              "prerelease": false
-            }' \
+            -d "{
+              \"tag_name\": \"$tag_name\",
+              \"name\": \"$release_name\",
+              \"body\": \"$release_body\",
+              \"draft\": false,
+              \"prerelease\": false
+            }" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/releases")
 
           upload_url=$(echo "$response" | jq -r '.upload_url' | sed 's/{?name,label}//')
@@ -48,7 +48,7 @@ jobs:
           upload_url="${{ steps.create_release.outputs.upload_url }}?name=$asset_name"
 
           response=$(curl -sSL \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: $content_type" \
             --data-binary @"$asset_path" \
             "$upload_url")
