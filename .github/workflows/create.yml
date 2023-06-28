@@ -46,11 +46,17 @@ jobs:
             retries: 3
             script: |
                 console.log('Release ID: ${{ steps.create-release.outputs.release_id }}')
-                await github.request('POST /repos/awesomel-es/slave-repository/releases/${{steps.create-release.outputs.release_id}}/assets{?test.txt, label}', {
+                const releaseId = ${{ steps.create-release.outputs.release_id }};
+                const assetName = 'test.txt';
+                const encodedAssetName = encodeURIComponent(assetName);
+
+                await github.request(`POST /repos/awesomel-es/slave-repository/releases/${releaseId}/assets{?name,label}`, {
                     owner: 'awesomel-es',
                     repo: 'slave-repository',
-                    release_id: ${{ steps.create-release.outputs.release_id }},
-                    data: '@test.txt',
+                    release_id: releaseId,
+                    name: encodedAssetName,
+                    label: 'TestFile',
+                    data: '@' + assetName,
                     headers: {
                         'X-GitHub-Api-Version': '2022-11-28'
                     }
