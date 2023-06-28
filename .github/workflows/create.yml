@@ -51,7 +51,7 @@ jobs:
                     repo: 'slave-repository',
                     name: 'test.txt',
                     label: 'TestFile',
-                    data: '@${{assetName}}',
+                    data: '@test.txt',
                     headers: {
                         'X-GitHub-Api-Version': '2022-11-28'
                     }
