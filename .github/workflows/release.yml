@@ -1,0 +1,60 @@
+name: Release Workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Create Release
+        id: create_release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GH_TK }}
+          script: |
+            const response = await github.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: 'v1.0.0',
+              name: 'Release 1.0.0',
+              body: 'This is the release description. You can include additional details here.',
+              draft: false,
+              prerelease: false
+            });
+
+            console.log('Release created:', response.data.html_url);
+
+            core.setOutput('upload_url', response.data.upload_url);
+
+      - name: Upload Release Asset
+        id: upload_asset
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GH_TK }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const uploadUrl = context.payload.action.outputs.upload_url;
+            const filePath = './test.txt';
+            const fileName = 'test.txt';
+            const contentType = 'text/plain';
+
+            const fileData = fs.readFileSync(filePath);
+            const headers = {
+              'Content-Type': contentType,
+              'Content-Length': fileData.length,
+            };
+
+            const uploadAssetResponse = await github.request({
+              method: 'POST',
+              url: uploadUrl,
+              headers,
+              data: fileData
+            });
+
+            console.log('Asset uploaded:', uploadAssetResponse.data.browser_download_url);
