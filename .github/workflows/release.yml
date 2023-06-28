@@ -1,22 +1,28 @@
-name: Release Workflow
+name: Create Release
+
 on:
   workflow_dispatch:
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - uses: actions/github-script@v6
-        id: my-script
+      - name: Create Release
+        uses: actions/github-script@v6
         with:
-          result-encoding: string
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/awesomel-es/master-repository/releases
-            
+            const { data } = await github.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: 'v1.0.0',
+              name: 'My Release',
+              body: 'This is my first release',
+              draft: false,
+              prerelease: false,
+            })
+            console.log(data.html_url)
