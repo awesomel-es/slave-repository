@@ -18,6 +18,7 @@ jobs:
         id: my-script
         with:
           result-encoding: string
+          github-token: ${{ secrets.API_GH_TK }}
           retries: 3
           script: |
             await github.request('POST /repos/awesomel-es/slave-repository/releases', {
