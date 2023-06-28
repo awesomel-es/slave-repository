@@ -10,47 +10,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Create Release
-        id: create_release
-        run: |
-          access_token="${{ secrets.GITHUB_TOKEN }}"
-          tag_name="v1.0.0"
-          release_name="Release 1.0.0"
-          release_body="This is the release description. You can include additional details here."
-
-          response=$(curl -sSL \
-            -H "Authorization: Bearer $access_token" \
-            -H "Content-Type: application/json" \
-            -X POST \
-            -d "{
-              \"tag_name\": \"$tag_name\",
-              \"name\": \"$release_name\",
-              \"body\": \"$release_body\",
-              \"draft\": false,
-              \"prerelease\": false
-            }" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases")
-
-          upload_url=$(echo "$response" | jq -r '.upload_url')
-
-          echo "Release created: $(echo "$response" | jq -r '.html_url')"
-          echo "::set-output name=upload_url::$upload_url"
-
-      - name: Upload Release Asset
-        id: upload_asset
-        run: |
-          asset_path="./test.txt"
-          asset_name="test.txt"
-          content_type="text/plain"
-
-          upload_url="${{ steps.create_release.outputs.upload_url }}?name=$asset_name"
-
-          upload_url="${upload_url//$'\n'/}" # Remove newline character from the end of the upload URL
-
-          response=$(curl -sSL \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: $content_type" \
-            --data-binary @"$asset_path" \
-            "$upload_url")
-
-          echo "Asset uploaded: $(echo "$response" | jq -r '.browser_download_url')"
+      - uses: actions/github-script@v6
+        id: my-script
+        with:
+          result-encoding: string
+          script: |
+            gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/awesomel-es/master-repository/releases
+            
