@@ -20,12 +20,7 @@ jobs:
           result-encoding: string
           retries: 3
           script: |
-            const { Octokit } = require("@octokit/core");
-            const octokit = new Octokit({
-                auth: ${{ secrets.API_GH_TK }}
-            })
-
-            await octokit.request('POST /repos/awesomel-es/slave-repository/releases', {
+            await github.request('POST /repos/awesomel-es/slave-repository/releases', {
                 owner: 'awesomel-es',
                 repo: 'slave-repository',
                 tag_name: 'v2.0.0',
