@@ -1,8 +1,6 @@
 name: Release Workflow
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   release:
@@ -33,7 +31,7 @@ jobs:
             }" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/releases")
 
-          upload_url=$(echo "$response" | jq -r '.upload_url' | sed 's/{?name,label}//')
+          upload_url=$(echo "$response" | jq -r '.upload_url')
 
           echo "Release created: $(echo "$response" | jq -r '.html_url')"
           echo "::set-output name=upload_url::$upload_url"
@@ -46,6 +44,8 @@ jobs:
           content_type="text/plain"
 
           upload_url="${{ steps.create_release.outputs.upload_url }}?name=$asset_name"
+
+          upload_url="${upload_url//$'\n'/}" # Remove newline character from the end of the upload URL
 
           response=$(curl -sSL \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
