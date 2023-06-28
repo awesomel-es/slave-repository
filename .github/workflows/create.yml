@@ -24,9 +24,9 @@ jobs:
             const release_created = await github.request('POST /repos/awesomel-es/slave-repository/releases', {
                 owner: 'awesomel-es',
                 repo: 'slave-repository',
-                tag_name: 'v4.0.4',
+                tag_name: 'v4.0.5',
                 target_commitish: 'main',
-                name: 'v4.0.4',
+                name: 'v4.0.5',
                 body: 'Description of the release',
                 draft: false,
                 prerelease: false,
@@ -46,7 +46,7 @@ jobs:
             retries: 3
             script: |
                 console.log('Release ID: ${{ steps.create-release.outputs.release_id }}')
-                await octokit.request('POST /repos/awesomel-es/slave-repository/releases/${{steps.create-release.outputs.release_id}}/assets{?test.txt, label}', {
+                await github.request('POST /repos/awesomel-es/slave-repository/releases/${{steps.create-release.outputs.release_id}}/assets{?test.txt, label}', {
                     owner: 'awesomel-es',
                     repo: 'slave-repository',
                     release_id: ${{ steps.create-release.outputs.release_id }},
