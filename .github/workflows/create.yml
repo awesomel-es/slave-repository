@@ -26,7 +26,7 @@ jobs:
                 const release_id = '110316980'
                 console.log(release_id)
                 const file_name = 'test.txt'
-                const upload_asset = await github.request('POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}', {
+                const upload_asset = await github.request('POST https://uploads.github.com/repos/awesomel-es/slave-repository/releases/110316980/assets{?name,label}', {
                     owner: owner,
                     repo: repo,
                     release_id: release_id,
