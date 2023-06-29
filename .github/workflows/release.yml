@@ -1,4 +1,4 @@
-name: Create Release
+name: Get Release File
 
 on:
   workflow_dispatch:
@@ -7,14 +7,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ASSET_NAME: test.txt
-      REPO: slave-repository
+      ARTIFACT_NAME: test
+      FILE_NAME: test.txt
       OWNER: awesomel-es
-
+      REPO: slave-repository
+      TAG: latest # Could be optional
     steps:
       - name: Find Release URL
         id: find-release-url
         run: |
+          # Get the latest Release url
           RELEASE_URL=$(curl -s -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
             "https://api.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/releases/latest" | jq -r '.url')
@@ -24,9 +26,10 @@ jobs:
       - name: Find Asset ID
         id: find-asset-id
         run: |
+          # Get the Asset ID by the filename
           ASSET_ID=$(curl -s -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
-          "${{ steps.find-release-url.outputs.release_url }}/assets" | jq -r ".[] | select(.name == \"${{ env.ASSET_NAME }}\") | .id")
+          "${{ steps.find-release-url.outputs.release_url }}/assets" | jq -r ".[] | select(.name == \"${{ env.ARTIFACT_NAME }}\") | .id")
 
           echo "asset_id=$ASSET_ID" >> "$GITHUB_OUTPUT"
         

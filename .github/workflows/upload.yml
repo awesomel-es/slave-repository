@@ -21,7 +21,7 @@ jobs:
                 -H "Authorization: Bearer ${{ secrets.API_GH_TK }}"\
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 -H "Content-Type: application/octet-stream" \
-                https://uploads.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/releases/${{ env.RELEASE_ID }}/assets?name=${{ env.FILENAME }} \
+                https://uploads.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/releases/${{ env.RELEASE_ID }}/assets?name=test \
                 --data-binary "@${{env.FILENAME}}")
             echo "UPLOAD $UPLOAD_RELEASE_ASSET"
 
