@@ -23,9 +23,9 @@ jobs:
                 -d '{"tag_name":"${{ env.TAG_NAME }}","target_commitish":"main","name":"${{ env.TAG_NAME }}","body":"Description of the release","draft":false,"prerelease":false,"generate_release_notes":false}')
             RELEASE_URL=$(echo "$CREATE_RELEASE" | jq -r '.url')
             echo "Release URL: $RELEASE_URL"
-            echo "::set-output name=release_url::$RELEASE_URL"
+            echo "{release_url}={$RELEASE_URL}" >> $GITHUB_OUTPUT
         env:
-          TAG_NAME: v9.0.7
+          TAG_NAME: v9.0.8
           REPO: slave-repository
           OWNER: awesomel-es
       
