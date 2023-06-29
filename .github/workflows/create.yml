@@ -23,7 +23,7 @@ jobs:
           script: |
             const repo = 'slave-repository';
             const owner = 'awesomel-es'
-            const tag_name = 'v4.3.3'
+            const tag_name = 'v4.3.4'
             const release_created = await github.request(`POST /repos/${owner}/${repo}/releases`, {
                 owner: owner,
                 repo: repo,
