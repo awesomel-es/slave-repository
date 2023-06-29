@@ -29,4 +29,4 @@ jobs:
           REPO: slave-repository
           OWNER: awesomel-es
       
-      - run: echo "url ${{ steps.release-create.release_url }}"
+      - run: echo "url ${{ steps.release-create.outputs.release_url }}"
