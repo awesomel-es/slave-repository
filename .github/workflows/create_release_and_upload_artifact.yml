@@ -12,7 +12,7 @@ jobs:
         OWNER: awesomel-es
         REPO: slave-repository
         RELEASE_ID: 110330365
-        TAG_NAME: v10.0.0
+        TAG_NAME: v10.0.1
 
     steps:
       - name: Checkout code
