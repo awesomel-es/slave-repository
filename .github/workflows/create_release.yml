@@ -19,6 +19,10 @@ on:
       access_token:
         description: 'The GitHub access token to authorizate the release creation command'
         required: true
+    outputs:
+      release_id:
+        description: "The ID of the release created"
+        value: ${{ jobs.create-release.outputs.release_id }}
 
 jobs:
   create-release:
