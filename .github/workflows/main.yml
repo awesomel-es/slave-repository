@@ -34,13 +34,18 @@ jobs:
     with:
         owner: ${{ github.repository_owner }}
         repository_name: ${{ github.event.repository.name }}
-        tag_name: v11.0.2
+        tag_name: v11.0.3
     secrets:
         access_token: ${{ secrets.API_GH_TK }}
-
-  echoing-output:
+  
+  upload-asset:
     needs: create-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echoing data
-        run: echo '${{ needs.create-release.outputs.release_id }}'
+    uses: awesomel-es/slave-repository/.github/workflows/upload_asset_to_release.yml@main
+    with:
+        artifact_name: ${{ env.upload_artifact_name }}
+        file_name: ${{ env.upload_file_name }}
+        release_id: ${{ needs.create-release.outputs.release_id }}
+        owner: ${{ github.repository_owner }}
+        repository_name: ${{ github.event.repository.name }}
+    secrets:
+        access_token: ${{ secrets.API_GH_TK }}
