@@ -3,6 +3,9 @@ name: Main Step by Step
 on:
   workflow_dispatch:
 
+env:
+    upload_artifact_name: test
+    upload_file_name: test.txt
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,3 +20,9 @@ jobs:
 
       - name: Build
         run: echo 'Done'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: ${{ env.upload_artifact_name }}
+            path: ${{ env.upload_file_name }} 
