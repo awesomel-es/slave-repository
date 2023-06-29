@@ -26,7 +26,7 @@ jobs:
             echo "Release URL: $RELEASE_URL"
             core.setOutput('outputKey', 'outputVal');
         env:
-          TAG_NAME: v9.0.6
+          TAG_NAME: v9.0.7
           REPO: slave-repository
           OWNER: awesomel-es
       
