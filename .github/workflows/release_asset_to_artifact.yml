@@ -1,4 +1,4 @@
-name: Get Release File
+name: Release Asset to Artifact
 
 on:
   workflow_dispatch:
@@ -29,7 +29,7 @@ jobs:
           # Get the Asset ID by the filename
           ASSET_ID=$(curl -s -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
-          "${{ steps.find-release-url.outputs.release_url }}/assets" | jq -r ".[] | select(.name == \"${{ env.ARTIFACT_NAME }}\") | .id")
+          "${{ steps.find-release-url.outputs.release_url }}/assets" | jq -r ".[] | select(.name == \"${{ env.FILE_NAME }}\") | .id")
 
           echo "asset_id=$ASSET_ID" >> "$GITHUB_OUTPUT"
         
