@@ -1,0 +1,19 @@
+name: Main Step by Step
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Echoing data
+        run: |
+            echo '${{ github.event.repository.name }}'
+            echo '${{ github.repository_owner }}'
+            ls -la
+
+      - name: Build
+        run: echo 'Done'

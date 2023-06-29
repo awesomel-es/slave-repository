@@ -1,0 +1,48 @@
+name: Upload Asset from Artifact
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        description: 'The artifact that should be downloaded in order to retrieve the asset'
+        required: true
+        type: string
+      file_name:
+        description: 'The asset file name'
+        required: true
+        type: string
+      owner:
+        description: 'The personal owner or organization owner of the repository'
+        required: true
+        type: string
+      repository_name:
+        description: 'The repository name'
+        required: true
+        type: string
+      release_id:
+        description: 'The release id on which the asset will be uploaded'
+        required: true
+        type: string
+    secrets:
+      access_token:
+        description: 'The GitHub access token to authorizate the release creation command'
+        required: true
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+      
+      - name: Upload Release Asset
+        run: |
+            UPLOAD_RELEASE_ASSET=$(curl -L \
+                -X POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ secrets.access_token }}"\
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                -H "Content-Type: application/octet-stream" \
+                https://uploads.github.com/repos/${{ inputs.owner }}/${{ inputs.repository_name }}/releases/${{ inputs.release_id }}/assets?name=${{inputs.file_name}} \
+                --data-binary "@${{inputs.file_name}}")
