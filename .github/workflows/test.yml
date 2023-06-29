@@ -21,7 +21,8 @@ jobs:
                 https://api.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/releases \
                 -d '{"tag_name":"${{ env.TAG_NAME }}","target_commitish":"main","name":"${{ env.TAG_NAME }}","body":"Description of the release","draft":false,"prerelease":false,"generate_release_notes":false}')
             echo $CREATE_RELEASE
-            echo $CREATE_RELEASE.url
+            RELEASE_URL=$($CREATE_RELEASE | jq -r '.url')
+            echo RELEASE_URL: $RELEASE_URL
         env:
           TAG_NAME: v9.0.4
           REPO: slave-repository
