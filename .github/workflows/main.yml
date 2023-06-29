@@ -30,7 +30,7 @@ jobs:
 
   create-release:
     needs: build
-    uses: awesomel-es/slave-repository/.github/workflows/create_release.yml
+    uses: awesomel-es/slave-repository/.github/workflows/create_release.yml@main
     with:
         owner: ${{ github.repository_owner }}
         repository_name: ${{ github.event.repository.name }}
