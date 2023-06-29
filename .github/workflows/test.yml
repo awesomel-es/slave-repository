@@ -24,6 +24,6 @@ jobs:
             RELEASE_URL=$($CREATE_RELEASE | jq -r '.url')
             echo RELEASE_URL: $RELEASE_URL
         env:
-          TAG_NAME: v9.0.4
+          TAG_NAME: v9.0.5
           REPO: slave-repository
           OWNER: awesomel-es
