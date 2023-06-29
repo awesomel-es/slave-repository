@@ -6,7 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+        GITHUB_TOKEN: ${{ secrets.API_GH_TK }}
     steps:
       - name: Echoing files
         run: ls -la
@@ -23,8 +24,6 @@ jobs:
             /repos/$OWNER/$REPO/releases/$RELEASE_ID/assets?name=test.txt \
             -f '@test.txt'
         env:
-            GITHUB_TOKEN: ${{ secrets.API_GH_TK }}
-            ISSUE: ${{ github.event.issue.html_url }}
             OWNER: awesomel-es
             REPO: slave-repository
             RELEASE_ID: 110316636
