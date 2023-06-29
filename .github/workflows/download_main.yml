@@ -1,0 +1,43 @@
+name: Download Main Step by Step
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  release-asset-to-artifact:
+    uses: awesomel-es/slave-repository/.github/workflows/release_asset_to_artifact.yml@main
+    with:
+      artifact_name: test
+      file_name: test.txt
+      owner: ${{ github.repository_owner }}
+      repository_name: ${{ github.event.repository.name }}
+
+    secrets:
+        access_token: ${{ secrets.API_GH_TK }}
+  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Echoing data
+        run: |
+            echo '${{ github.event.repository.name }}'
+            echo '${{ github.repository_owner }}'
+            ls -la
+
+      - name: Create dependencies folder
+        run: mkdir dependencies
+
+      - name: Download artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test
+          path: dependencies/ 
+
+      - name: Build
+        run: |
+          echo 'Done'
+          ls -la
+          ls -la dependencies

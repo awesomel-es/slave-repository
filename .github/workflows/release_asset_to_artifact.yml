@@ -1,25 +1,40 @@
 name: Release Asset to Artifact
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      artifact_name:
+        description: 'The artifact that should be downloaded in order to retrieve the asset'
+        required: true
+        type: string
+      file_name:
+        description: 'The asset file name'
+        required: true
+        type: string
+      owner:
+        description: 'The personal owner or organization owner of the repository'
+        required: true
+        type: string
+      repository_name:
+        description: 'The repository name'
+        required: true
+        type: string
+    secrets:
+      access_token:
+        description: 'The GitHub access token to authorizate the release creation command'
+        required: true
 
 jobs:
-  build:
+  get-release-asset-and-upload-artifact:
     runs-on: ubuntu-latest
-    env:
-      ARTIFACT_NAME: test
-      FILE_NAME: test.txt
-      OWNER: awesomel-es
-      REPO: slave-repository
-      TAG: latest # Could be optional
     steps:
       - name: Find Release URL
         id: find-release-url
         run: |
           # Get the latest Release url
           RELEASE_URL=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
-            "https://api.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/releases/latest" | jq -r '.url')
+            -H "Authorization: Bearer ${{ secrets.access_token }}" \
+            "https://api.github.com/repos/${{ inputs.owner }}/${{ inputs.repository_name }}/releases/latest" | jq -r '.url')
 
           echo "release_url=$RELEASE_URL" >> "$GITHUB_OUTPUT"
 
@@ -28,8 +43,8 @@ jobs:
         run: |
           # Get the Asset ID by the filename
           ASSET_ID=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
-          "${{ steps.find-release-url.outputs.release_url }}/assets" | jq -r ".[] | select(.name == \"${{ env.FILE_NAME }}\") | .id")
+          -H "Authorization: Bearer ${{ secrets.access_token }}" \
+          "${{ steps.find-release-url.outputs.release_url }}/assets" | jq -r ".[] | select(.name == \"${{ inputs.file_name }}\") | .id")
 
           echo "asset_id=$ASSET_ID" >> "$GITHUB_OUTPUT"
         
@@ -37,9 +52,12 @@ jobs:
         run: |
           # Download the asset's binary content
           curl -LOJ -H "Accept: application/octet-stream" \
-            -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
+            -H "Authorization: Bearer ${{ secrets.access_token}}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/releases/assets/${{ steps.find-asset-id.outputs.asset_id }}"
+            "https://api.github.com/repos/${{ inputs.owner }}/${{ inputs.repository_name }}/releases/assets/${{ steps.find-asset-id.outputs.asset_id }}"
 
-      - name: Echoing files
-        run: ls -la
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: ${{ inputs.artifact_name }}
+            path: ${{ inputs.file_name }}
