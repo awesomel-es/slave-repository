@@ -21,12 +21,13 @@ jobs:
           github-token: ${{ secrets.API_GH_TK }}
           retries: 3
           script: |
-            const release_created = await github.request('POST /repos/awesomel-es/slave-repository/releases', {
+            const repo = 'slave-repository';
+            const release_created = await github.request(`POST /repos/awesomel-es/${repo}/releases`, {
                 owner: 'awesomel-es',
-                repo: 'slave-repository',
-                tag_name: 'v4.1.10',
+                repo: repo,
+                tag_name: 'v4.2.0',
                 target_commitish: 'main',
-                name: 'v4.1.10',
+                name: 'v4.2.0',
                 body: 'Description of the release',
                 draft: false,
                 prerelease: false,
@@ -34,27 +35,8 @@ jobs:
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
-            })
+            });
             console.log(release_created.data)
             core.setOutput('release_id', release_created.data.id);
             core.setOutput('upload_url', release_created.data.upload_url);
-      - uses: actions/github-script@v6
-        id: my-script
-        with:
-            result-encoding: string
-            github-token: ${{ secrets.API_GH_TK }}
-            retries: 3
-            script: |
-                console.log('Release ID: ${{ steps.create-release.outputs.release_id }}')
-                const file_name = 'test.txt';
-                const url = '${{steps.create-release.outputs.upload_url}}'.replace('https://uploads.github.com', '')
-                console.log(url, ${{url}})
-                await github.request('POST ${{url}}', {
-                    owner: 'awesomel-es',
-                    repo: 'slave-repository',
-                    release_id: ${{ steps.create-release.outputs.release_id }},
-                    data: `@${{file_name}}`,
-                    headers: {
-                        'X-GitHub-Api-Version': '2022-11-28'
-                    }
-                })
+
