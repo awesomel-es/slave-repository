@@ -20,7 +20,8 @@ jobs:
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 https://api.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/releases \
                 -d '{"tag_name":"${{ env.TAG_NAME }}","target_commitish":"main","name":"${{ env.TAG_NAME }}","body":"Description of the release","draft":false,"prerelease":false,"generate_release_notes":false}')
+            echo CREATE_RELEASE
         env:
-          TAG_NAME: v9.0.1
+          TAG_NAME: v9.0.2
           REPO: slave-repository
           OWNER: awesomel-es
