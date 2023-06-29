@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Creating release
         id: release-create
-        run: |
+        run: |        
+            const core = require('@actions/core');
             CREATE_RELEASE=$(curl -L -X POST \
                 -H "Accept: application/vnd.github.v3+json" \
                 -H "Authorization: Bearer ${{ secrets.API_GH_TK }}" \
@@ -23,7 +24,7 @@ jobs:
                 -d '{"tag_name":"${{ env.TAG_NAME }}","target_commitish":"main","name":"${{ env.TAG_NAME }}","body":"Description of the release","draft":false,"prerelease":false,"generate_release_notes":false}')
             RELEASE_URL=$(echo "$CREATE_RELEASE" | jq -r '.url')
             echo "Release URL: $RELEASE_URL"
-            core.setOutput('release_url', $RELEASE_URL);
+            core.setOutput('outputKey', 'outputVal');
         env:
           TAG_NAME: v9.0.6
           REPO: slave-repository
