@@ -52,6 +52,7 @@ jobs:
                 const repo = 'slave-repository';
                 const owner = 'awesomel-es'
                 const release_id = '${{steps.create-release.outputs.data.id}}'
+                console.log(release_id, ${{steps.create-release.outputs.data}})
                 const file_name = 'test.txt'
                 const upload_asset = await github.request('POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}', {
                     owner: owner,
