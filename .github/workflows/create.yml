@@ -49,7 +49,7 @@ jobs:
                 const releaseId = ${{ steps.create-release.outputs.release_id }};
                 const assetName = 'test.txt';
 
-                await github.request(`POST /repos/awesomel-es/slave-repository/releases/${releaseId}/assets?name=${assetName}&label=TestFile`, {
+                await github.request(`POST /repos/awesomel-es/slave-repository/releases/${releaseId}/assets, {
                     owner: 'awesomel-es',
                     repo: 'slave-repository',
                     release_id: releaseId,
