@@ -24,9 +24,9 @@ jobs:
             const release_created = await github.request('POST /repos/awesomel-es/slave-repository/releases', {
                 owner: 'awesomel-es',
                 repo: 'slave-repository',
-                tag_name: 'v4.0.8',
+                tag_name: 'v4.1.8',
                 target_commitish: 'main',
-                name: 'v4.0.8',
+                name: 'v4.1.8',
                 body: 'Description of the release',
                 draft: false,
                 prerelease: false,
