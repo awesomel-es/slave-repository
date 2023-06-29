@@ -23,7 +23,7 @@ jobs:
           script: |
             const repo = 'slave-repository';
             const owner = 'awesomel-es'
-            const tag_name = 'v4.3.0'
+            const tag_name = 'v4.3.1'
             const release_created = await github.request(`POST /repos/${owner}/${repo}/releases`, {
                 owner: owner,
                 repo: repo,
@@ -41,7 +41,7 @@ jobs:
             console.log(release_created.data)
             core.setOutput('release_id', release_created.data.id);
             const file_name = 'test.txt'
-            const upload_asset = await github.request('POST /repos/${owner}/${repo}/releases/${release_created.data.id}/assets{?name,label}', {
+            const upload_asset = await github.request('POST /repos/${owner}/{repo}/releases/{release_created.data.id}/assets{?name,label}', {
                 owner: owner,
                 repo: repo,
                 release_id: release_created.data.id,
