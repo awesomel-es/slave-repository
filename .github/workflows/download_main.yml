@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   release-asset-to-artifact:
     uses: awesomel-es/slave-repository/.github/workflows/release_asset_to_artifact.yml@main
     with:
@@ -17,6 +16,7 @@ jobs:
         access_token: ${{ secrets.API_GH_TK }}
   
   build:
+    needs: release-asset-to-artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
