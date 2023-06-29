@@ -10,6 +10,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+        upload_artifact_name: ${{ steps.pass-environment-variables.outputs.upload_artifact_name }}
+        upload_file_name: ${{ steps.pass-environment-variables.outputs.upload_file_name }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -27,6 +31,12 @@ jobs:
         with:
             name: ${{ env.upload_artifact_name }}
             path: ${{ env.upload_file_name }} 
+      
+      - name: Pass Environment variables
+        id: pass-environment-variables
+        run: |
+            echo "upload_artifact_name=${{env.upload_artifact_name}}" >> "$GITHUB_OUTPUT"
+            echo "upload_file_name=${{env.upload_file_name}}" >> "$GITHUB_OUTPUT"
 
   create-release:
     needs: build
@@ -34,16 +44,16 @@ jobs:
     with:
         owner: ${{ github.repository_owner }}
         repository_name: ${{ github.event.repository.name }}
-        tag_name: v11.0.3
+        tag_name: v11.0.4
     secrets:
         access_token: ${{ secrets.API_GH_TK }}
   
   upload-asset:
-    needs: create-release
+    needs: [build, create-release]
     uses: awesomel-es/slave-repository/.github/workflows/upload_asset_to_release.yml@main
     with:
-        artifact_name: ${{ env.upload_artifact_name }}
-        file_name: ${{ env.upload_file_name }}
+        artifact_name: ${{ needs.build.outputs.upload_artifact_name }}
+        file_name: ${{ needs.build.outputs.upload_file_name }}
         release_id: ${{ needs.create-release.outputs.release_id }}
         owner: ${{ github.repository_owner }}
         repository_name: ${{ github.event.repository.name }}
