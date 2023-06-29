@@ -24,9 +24,9 @@ jobs:
             const release_created = await github.request('POST /repos/awesomel-es/slave-repository/releases', {
                 owner: 'awesomel-es',
                 repo: 'slave-repository',
-                tag_name: 'v4.1.8',
+                tag_name: 'v4.1.9',
                 target_commitish: 'main',
-                name: 'v4.1.8',
+                name: 'v4.1.9',
                 body: 'Description of the release',
                 draft: false,
                 prerelease: false,
@@ -46,13 +46,14 @@ jobs:
             retries: 3
             script: |
                 console.log('Release ID: ${{ steps.create-release.outputs.release_id }}')
-                const assetName = 'test.txt';
+                const file_name = 'test.txt';
+                const url = '${{steps.create-release.outputs.upload_url}}'.replace('https://uploads.github.com', '')
 
-                await github.request(`POST ${{steps.create-release.outputs.upload_url}}, {
+                await github.request(`POST ${url}`, {
                     owner: 'awesomel-es',
                     repo: 'slave-repository',
                     release_id: ${{ steps.create-release.outputs.release_id }},
-                    data: '@' + assetName,
+                    data: `@${file_name}`,
                     headers: {
                         'X-GitHub-Api-Version': '2022-11-28'
                     }
