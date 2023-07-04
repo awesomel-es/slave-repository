@@ -15,12 +15,12 @@ jobs:
           gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/tags/v11.0.4
+          /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/tags/v11.0.5
       - name: Echoing
         run: echo ${{steps.checking.outcome}}
       
       - name: Exists
-        if: always()
+        if: always() && steps.integrationTests.outcome == 'success'
         run: echo "Version exists"
       
       - name: Exists
