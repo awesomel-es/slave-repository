@@ -16,7 +16,7 @@ jobs:
           gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/tags/v11.0.5
+          /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/tags/v11.0.4
      
       - name: Echoing
         run: echo ${{steps.checking.outcome}}
