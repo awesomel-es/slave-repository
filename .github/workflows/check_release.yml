@@ -1,4 +1,4 @@
-name: Download Main Step by Step
+name: Check Release
 
 on:
   workflow_dispatch:
