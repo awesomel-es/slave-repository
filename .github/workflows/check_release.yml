@@ -24,7 +24,7 @@ jobs:
         if: always() && steps.checking.outcome == 'success'
         run: echo "Version exists"
       
-      - name: Exists
+      - name: Not Exists
         if: always() && steps.checking.outcome == 'failure'
         run: echo "Version does not exists"
         
