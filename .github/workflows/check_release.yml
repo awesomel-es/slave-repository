@@ -1,0 +1,15 @@
+name: Download Main Step by Step
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: |
+          gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/tags/v11.0.4
