@@ -17,14 +17,17 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/tags/v11.0.5
+     
       - name: Echoing
         run: echo ${{steps.checking.outcome}}
       
-      - name: Exists
-        if: always() && steps.checking.outcome == 'success'
-        run: echo "Version exists"
-      
-      - name: Not Exists
-        if: always() && steps.checking.outcome == 'failure'
-        run: echo "Version does not exists"
-        
+      - name: Check if exists
+        run: |
+          if [[ ${{steps.checking.outcome}} == 'failure' ]]; then
+            echo "The version does not exists"
+          elif [[ ${{steps.checking.outcome}} == 'success' ]]; then
+            echo "The version exists."
+            echo "::error::The version already exists"
+          fi
+          
+          echo "Version exists"
