@@ -28,6 +28,6 @@ jobs:
           elif [[ ${{steps.checking.outcome}} == 'success' ]]; then
             echo "The version exists."
             echo "::error::The version already exists"
+            exit 1
           fi
-          
-          echo "Version exists"
+
