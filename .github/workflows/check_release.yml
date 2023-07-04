@@ -9,6 +9,7 @@ jobs:
     steps:
       - name: checking
         id: checking
+        continue-on-error: true
         env:
             GH_TOKEN: ${{github.token}}
         run: |
@@ -20,10 +21,10 @@ jobs:
         run: echo ${{steps.checking.outcome}}
       
       - name: Exists
-        if: always() && steps.integrationTests.outcome == 'success'
+        if: always() && steps.checking.outcome == 'success'
         run: echo "Version exists"
       
       - name: Exists
-        if: failure() && steps.integrationTests.outcome == 'failure'
+        if: failure() && steps.checking.outcome == 'failure'
         run: echo "Version does not exists"
         
