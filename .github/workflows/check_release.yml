@@ -24,6 +24,6 @@ jobs:
         run: echo "Version exists"
       
       - name: Exists
-        if: always() && steps.integrationTests.outcome == 'failure'
-        run: echo "Version exists"
+        if: failure() && steps.integrationTests.outcome == 'failure'
+        run: echo "Version does not exists"
         
